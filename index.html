@@ -53,11 +53,7 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: 
-                radial-gradient(ellipse at center, rgba(13, 26, 45, 0.8) 0%, rgba(5, 8, 17, 0.9) 70%),
-                radial-gradient(ellipse at 20% 80%, rgba(77, 201, 255, 0.3) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(155, 232, 255, 0.2) 0%, transparent 50%),
-                radial-gradient(ellipse at 40% 40%, rgba(209, 155, 255, 0.15) 0%, transparent 50%);
+            background: radial-gradient(ellipse at center, rgba(13, 26, 45, 0.8) 0%, rgba(5, 8, 17, 0.9) 70%), radial-gradient(ellipse at 20% 80%, rgba(77, 201, 255, 0.3) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(155, 232, 255, 0.2) 0%, transparent 50%), radial-gradient(ellipse at 40% 40%, rgba(209, 155, 255, 0.15) 0%, transparent 50%);
             overflow: hidden;
         }
 
@@ -77,8 +73,14 @@
         }
 
         @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
         }
 
         .shooting-star {
@@ -136,9 +138,15 @@
         }
 
         @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .nav-links {
@@ -201,7 +209,7 @@
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 3.8rem; /* Aumentado el tamaño del título */
             font-weight: 700;
             margin-bottom: 1.5rem;
             line-height: 1.1;
@@ -210,6 +218,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 30px rgba(77, 201, 255, 0.5);
+            letter-spacing: 1px; /* Añadido espacio entre letras */
         }
 
         .hero-subtitle {
@@ -420,13 +429,13 @@
         }
 
         @keyframes fadeInUp {
-            from { 
-                opacity: 0; 
-                transform: translateY(20px); 
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
-            to { 
-                opacity: 1; 
-                transform: translateY(0); 
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
@@ -530,14 +539,35 @@
             color: var(--robotics-color);
         }
 
-        /* Skills Grid */
-        .skills-categories {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        /* Skills Grid - Pasarela de izquierda a derecha */
+        .skills-carousel {
+            position: relative;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+
+        .skills-track {
+            display: flex;
             gap: 2rem;
+            animation: scrollSkills 30s linear infinite;
+            width: max-content;
+        }
+
+        @keyframes scrollSkills {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(calc(-280px * 5 - 2rem * 5)); /* Ancho de cada categoría * número de categorías + gap * número de categorías */
+            }
+        }
+
+        .skills-track:hover {
+            animation-play-state: paused;
         }
 
         .skill-category {
+            min-width: 280px;
             padding: 2rem;
             border: 2px solid;
             border-radius: 15px;
@@ -601,12 +631,29 @@
             border-color: currentColor;
         }
 
-        .skill-item.ai { color: var(--ai-color); }
-        .skill-item.ml { color: var(--ml-color); }
-        .skill-item.data { color: var(--data-color); }
-        .skill-item.electronics { color: var(--electronics-color); }
-        .skill-item.robotics { color: var(--robotics-color); }
-        .skill-item.cloud { color: var(--ml-color); }
+        .skill-item.ai {
+            color: var(--ai-color);
+        }
+
+        .skill-item.ml {
+            color: var(--ml-color);
+        }
+
+        .skill-item.data {
+            color: var(--data-color);
+        }
+
+        .skill-item.electronics {
+            color: var(--electronics-color);
+        }
+
+        .skill-item.robotics {
+            color: var(--robotics-color);
+        }
+
+        .skill-item.cloud {
+            color: var(--ml-color);
+        }
 
         /* Research Section */
         .research-card {
@@ -849,8 +896,7 @@
             gap: 1.2rem;
         }
 
-        .form-group input,
-        .form-group textarea {
+        .form-group input, .form-group textarea {
             width: 100%;
             padding: 1rem;
             border: 2px solid rgba(77, 201, 255, 0.2);
@@ -862,15 +908,13 @@
             font-family: inherit;
         }
 
-        .form-group input:focus,
-        .form-group textarea:focus {
+        .form-group input:focus, .form-group textarea:focus {
             outline: none;
             border-color: var(--ai-color);
             box-shadow: 0 0 15px rgba(77, 201, 255, 0.3);
         }
 
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
+        .form-group input::placeholder, .form-group textarea::placeholder {
             color: var(--secondary);
         }
 
@@ -918,44 +962,46 @@
             .container {
                 padding: 0 20px;
             }
-
             .nav-links {
                 display: none;
             }
-
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 2.8rem; /* Ajustado para móviles */
             }
-
             .about-content {
                 grid-template-columns: 1fr;
             }
-
             .contact-content {
                 grid-template-columns: 1fr;
             }
-
             .footer-content {
                 flex-direction: column;
                 gap: 1.5rem;
                 text-align: center;
             }
-
             .tabs-header {
                 flex-direction: column;
             }
-
             .tab-btn {
                 text-align: left;
                 border-bottom: 1px solid rgba(77, 201, 255, 0.2);
             }
-
             .experience-header {
                 flex-direction: column;
             }
-
             .projects-grid {
                 grid-template-columns: 1fr;
+            }
+            .skills-track {
+                animation: scrollSkillsMobile 30s linear infinite;
+            }
+            @keyframes scrollSkillsMobile {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(calc(-280px * 3 - 2rem * 3)); /* Menos categorías para móviles */
+                }
             }
         }
     </style>
@@ -988,8 +1034,7 @@
             <h1>AI & Machine Learning Engineer</h1>
             <div class="hero-subtitle">Electronics & Automation Engineer specializing in <span class="hero-highlight">Neural Networks</span>, Predictive Algorithms & Robotics</div>
             <div class="hero-description">
-                8+ years building intelligent systems that bridge electronics with artificial intelligence. 
-                Passionate about creating AI solutions that solve complex real-world problems.
+                8+ years building intelligent systems that bridge electronics with artificial intelligence. Passionate about creating AI solutions that solve complex real-world problems.
             </div>
             <div class="hero-badges">
                 <div class="badge ai">🤖 AI & ML Specialist</div>
@@ -1022,28 +1067,16 @@
                 </div>
                 <div class="about-text">
                     <p>
-                        <strong>Hello! I'm Edison</strong> - Electronics and Automation Engineer with specialization in 
-                        Artificial Intelligence and Machine Learning. I love collaborating in teams and creating 
-                        innovative solutions that combine the best of electronics with the power of AI.
+                        <strong>Hello! I'm Edison</strong> - Electronics and Automation Engineer with specialization in Artificial Intelligence and Machine Learning. I love collaborating in teams and creating innovative solutions that combine the best of electronics with the power of AI.
                     </p>
-                    
                     <p>
-                        As an <strong>AI & Machine Learning Specialist</strong>, I've dedicated my career to designing and 
-                        implementing intelligent systems ranging from complex neural networks to real-time prediction 
-                        algorithms. My experience covers the entire machine learning lifecycle, from model conception 
-                        to production deployment.
+                        As an <strong>AI & Machine Learning Specialist</strong>, I've dedicated my career to designing and implementing intelligent systems ranging from complex neural networks to real-time prediction algorithms. My experience covers the entire machine learning lifecycle, from model conception to production deployment.
                     </p>
-
                     <div class="personal-quote">
-                        "I believe in the power of teamwork and collaboration. I love tackling complex challenges 
-                        alongside talented colleagues, where each contributes their expertise to create solutions 
-                        that exceed what we could achieve individually."
+                        "I believe in the power of teamwork and collaboration. I love tackling complex challenges alongside talented colleagues, where each contributes their expertise to create solutions that exceed what we could achieve individually."
                     </div>
-
                     <p>
-                        When I'm not designing algorithms or training models, I enjoy mentoring other developers, 
-                        participating in hackathons, and contributing to projects that advance artificial intelligence 
-                        and intelligent automation.
+                        When I'm not designing algorithms or training models, I enjoy mentoring other developers, participating in hackathons, and contributing to projects that advance artificial intelligence and intelligent automation.
                     </p>
                 </div>
             </div>
@@ -1073,9 +1106,7 @@
                             <div class="experience-date">May 2019 – Apr 2025</div>
                         </div>
                         <div class="experience-description">
-                            Led the development of complete machine learning pipelines, designing and implementing 
-                            neural networks for computer vision and time-series forecasting. Specialized in creating 
-                            real-time inference systems using TensorFlow and PyTorch.
+                            Led the development of complete machine learning pipelines, designing and implementing neural networks for computer vision and time-series forecasting. Specialized in creating real-time inference systems using TensorFlow and PyTorch.
                         </div>
                         <div class="tech-highlights">
                             <span class="tech-tag ai">Deep Learning</span>
@@ -1085,7 +1116,6 @@
                             <span class="tech-tag ml">PyTorch</span>
                         </div>
                     </div>
-
                     <div class="experience-item">
                         <div class="experience-header">
                             <div>
@@ -1095,9 +1125,7 @@
                             <div class="experience-date">Feb 2023 – Jul 2023</div>
                         </div>
                         <div class="experience-description">
-                            Conducted advanced research on distributed consensus algorithms and control theory applied 
-                            to complex systems. Designed and implemented predictive models using neural networks 
-                            to estimate convergence and stability in multi-agent systems.
+                            Conducted advanced research on distributed consensus algorithms and control theory applied to complex systems. Designed and implemented predictive models using neural networks to estimate convergence and stability in multi-agent systems.
                         </div>
                         <div class="tech-highlights">
                             <span class="tech-tag ai">AI Research</span>
@@ -1119,9 +1147,7 @@
                             <div class="experience-date">2019 – Present</div>
                         </div>
                         <div class="experience-description">
-                            Developed prediction algorithms for various domains including wind energy, route planning, 
-                            and alert systems. Specialized in data preprocessing, feature engineering, and model 
-                            deployment in production.
+                            Developed prediction algorithms for various domains including wind energy, route planning, and alert systems. Specialized in data preprocessing, feature engineering, and model deployment in production.
                         </div>
                         <div class="tech-highlights">
                             <span class="tech-tag data">Data Science</span>
@@ -1130,7 +1156,6 @@
                             <span class="tech-tag data">Model Deployment</span>
                         </div>
                     </div>
-
                     <div class="experience-item">
                         <div class="experience-header">
                             <div>
@@ -1140,9 +1165,7 @@
                             <div class="experience-date">Feb 2023 – Jul 2023</div>
                         </div>
                         <div class="experience-description">
-                            Implemented data preprocessing pipelines for noise filtering, normalization, and feature 
-                            extraction. Developed and trained neural network predictors to estimate convergence and 
-                            stability margins in various scenarios.
+                            Implemented data preprocessing pipelines for noise filtering, normalization, and feature extraction. Developed and trained neural network predictors to estimate convergence and stability margins in various scenarios.
                         </div>
                         <div class="tech-highlights">
                             <span class="tech-tag data">Data Analysis</span>
@@ -1164,8 +1187,7 @@
                             <div class="experience-date">Jul 2023 – Apr 2025</div>
                         </div>
                         <div class="experience-description">
-                            Led the development of smart home systems and IoT devices. Managed multidisciplinary teams 
-                            and delivered technical training for system integration and automation solutions.
+                            Led the development of smart home systems and IoT devices. Managed multidisciplinary teams and delivered technical training for system integration and automation solutions.
                         </div>
                         <div class="tech-highlights">
                             <span class="tech-tag electronics">IoT</span>
@@ -1174,7 +1196,6 @@
                             <span class="tech-tag electronics">Embedded Systems</span>
                         </div>
                     </div>
-
                     <div class="experience-item">
                         <div class="experience-header">
                             <div>
@@ -1184,9 +1205,7 @@
                             <div class="experience-date">Oct 2020 – Jan 2021</div>
                         </div>
                         <div class="experience-description">
-                            Developed electronic prototypes for automotive security systems, including PCB design 
-                            and wireless communication. Programmed ATmega128P microcontrollers in C with 2.4GHz 
-                            RF communication.
+                            Developed electronic prototypes for automotive security systems, including PCB design and wireless communication. Programmed ATmega128P microcontrollers in C with 2.4GHz RF communication.
                         </div>
                         <div class="tech-highlights">
                             <span class="tech-tag electronics">PCB Design</span>
@@ -1197,76 +1216,74 @@
                     </div>
                 </div>
 
-                <!-- Skills Tab -->
+                <!-- Skills Tab - Pasarela de izquierda a derecha -->
                 <div id="skills-tab" class="tab-content">
-                    <div class="skills-categories">
-                        <div class="skill-category ai">
-                            <h3><i class="fas fa-brain" style="color: var(--ai-color);"></i> AI & Machine Learning</h3>
-                            <div class="skill-items">
-                                <span class="skill-item ai">Python</span>
-                                <span class="skill-item ai">TensorFlow</span>
-                                <span class="skill-item ai">PyTorch</span>
-                                <span class="skill-item ai">Keras</span>
-                                <span class="skill-item ai">Neural Networks</span>
-                                <span class="skill-item ai">Deep Learning</span>
-                                <span class="skill-item ai">Computer Vision</span>
-                                <span class="skill-item ai">Natural Language Processing</span>
+                    <div class="skills-carousel">
+                        <div class="skills-track">
+                            <div class="skill-category ai">
+                                <h3><i class="fas fa-brain" style="color: var(--ai-color);"></i> AI & Machine Learning</h3>
+                                <div class="skill-items">
+                                    <span class="skill-item ai">Python</span>
+                                    <span class="skill-item ai">TensorFlow</span>
+                                    <span class="skill-item ai">PyTorch</span>
+                                    <span class="skill-item ai">Keras</span>
+                                    <span class="skill-item ai">Neural Networks</span>
+                                    <span class="skill-item ai">Deep Learning</span>
+                                    <span class="skill-item ai">Computer Vision</span>
+                                    <span class="skill-item ai">Natural Language Processing</span>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="skill-category data">
-                            <h3><i class="fas fa-chart-line" style="color: var(--data-color);"></i> Data Science</h3>
-                            <div class="skill-items">
-                                <span class="skill-item data">Pandas</span>
-                                <span class="skill-item data">NumPy</span>
-                                <span class="skill-item data">scikit-learn</span>
-                                <span class="skill-item data">Data Visualization</span>
-                                <span class="skill-item data">Statistical Analysis</span>
-                                <span class="skill-item data">Time Series</span>
-                                <span class="skill-item data">Feature Engineering</span>
-                                <span class="skill-item data">Data Cleaning</span>
+                            <div class="skill-category data">
+                                <h3><i class="fas fa-chart-line" style="color: var(--data-color);"></i> Data Science</h3>
+                                <div class="skill-items">
+                                    <span class="skill-item data">Pandas</span>
+                                    <span class="skill-item data">NumPy</span>
+                                    <span class="skill-item data">scikit-learn</span>
+                                    <span class="skill-item data">Data Visualization</span>
+                                    <span class="skill-item data">Statistical Analysis</span>
+                                    <span class="skill-item data">Time Series</span>
+                                    <span class="skill-item data">Feature Engineering</span>
+                                    <span class="skill-item data">Data Cleaning</span>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="skill-category electronics">
-                            <h3><i class="fas fa-microchip" style="color: var(--electronics-color);"></i> Electronics & IoT</h3>
-                            <div class="skill-items">
-                                <span class="skill-item electronics">PCB Design</span>
-                                <span class="skill-item electronics">C/C++</span>
-                                <span class="skill-item electronics">Arduino</span>
-                                <span class="skill-item electronics">Raspberry Pi</span>
-                                <span class="skill-item electronics">STM32</span>
-                                <span class="skill-item electronics">Microcontrollers</span>
-                                <span class="skill-item electronics">Circuit Analysis</span>
-                                <span class="skill-item electronics">Wireless Communication</span>
+                            <div class="skill-category electronics">
+                                <h3><i class="fas fa-microchip" style="color: var(--electronics-color);"></i> Electronics & IoT</h3>
+                                <div class="skill-items">
+                                    <span class="skill-item electronics">PCB Design</span>
+                                    <span class="skill-item electronics">C/C++</span>
+                                    <span class="skill-item electronics">Arduino</span>
+                                    <span class="skill-item electronics">Raspberry Pi</span>
+                                    <span class="skill-item electronics">STM32</span>
+                                    <span class="skill-item electronics">Microcontrollers</span>
+                                    <span class="skill-item electronics">Circuit Analysis</span>
+                                    <span class="skill-item electronics">Wireless Communication</span>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="skill-category robotics">
-                            <h3><i class="fas fa-robot" style="color: var(--robotics-color);"></i> Robotics & Automation</h3>
-                            <div class="skill-items">
-                                <span class="skill-item robotics">ROS</span>
-                                <span class="skill-item robotics">PLC Programming</span>
-                                <span class="skill-item robotics">Control Systems</span>
-                                <span class="skill-item robotics">SCADA</span>
-                                <span class="skill-item robotics">IoT</span>
-                                <span class="skill-item robotics">Multi-agent Systems</span>
-                                <span class="skill-item robotics">Path Planning</span>
-                                <span class="skill-item robotics">Sensor Integration</span>
+                            <div class="skill-category robotics">
+                                <h3><i class="fas fa-robot" style="color: var(--robotics-color);"></i> Robotics & Automation</h3>
+                                <div class="skill-items">
+                                    <span class="skill-item robotics">ROS</span>
+                                    <span class="skill-item robotics">PLC Programming</span>
+                                    <span class="skill-item robotics">Control Systems</span>
+                                    <span class="skill-item robotics">SCADA</span>
+                                    <span class="skill-item robotics">IoT</span>
+                                    <span class="skill-item robotics">Multi-agent Systems</span>
+                                    <span class="skill-item robotics">Path Planning</span>
+                                    <span class="skill-item robotics">Sensor Integration</span>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="skill-category cloud">
-                            <h3><i class="fas fa-cloud" style="color: var(--ml-color);"></i> Cloud & Development</h3>
-                            <div class="skill-items">
-                                <span class="skill-item cloud">Azure</span>
-                                <span class="skill-item cloud">DigitalOcean</span>
-                                <span class="skill-item cloud">Docker</span>
-                                <span class="skill-item cloud">REST APIs</span>
-                                <span class="skill-item cloud">Flask/FastAPI</span>
-                                <span class="skill-item cloud">Git</span>
-                                <span class="skill-item cloud">CI/CD</span>
-                                <span class="skill-item cloud">Linux/Ubuntu</span>
+                            <div class="skill-category cloud">
+                                <h3><i class="fas fa-cloud" style="color: var(--ml-color);"></i> Cloud & Development</h3>
+                                <div class="skill-items">
+                                    <span class="skill-item cloud">Azure</span>
+                                    <span class="skill-item cloud">DigitalOcean</span>
+                                    <span class="skill-item cloud">Docker</span>
+                                    <span class="skill-item cloud">REST APIs</span>
+                                    <span class="skill-item cloud">Flask/FastAPI</span>
+                                    <span class="skill-item cloud">Git</span>
+                                    <span class="skill-item cloud">CI/CD</span>
+                                    <span class="skill-item cloud">Linux/Ubuntu</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1284,14 +1301,10 @@
                 <div class="research-authors">Camacho O., Santillán E., Uribe J., & Ocampo C. (2024)</div>
                 <div class="research-conference">4th IFAC Conference on Advances in Proportional-Integral-Derivative Control, Almeria, Spain, June 12–14, 2024</div>
                 <div class="research-description">
-                    Presented innovative control strategies for hydrogen purity regulation in high-pressure 
-                    alkaline electrolyzers using sliding mode control approaches. This research contributes 
-                    to sustainable energy solutions and advanced control systems, demonstrating the application 
-                    of modern control theory to complex industrial processes in the renewable energy sector.
+                    Presented innovative control strategies for hydrogen purity regulation in high-pressure alkaline electrolyzers using sliding mode control approaches. This research contributes to sustainable energy solutions and advanced control systems, demonstrating the application of modern control theory to complex industrial processes in the renewable energy sector.
                 </div>
                 <a href="#" class="research-link">
-                    <i class="fas fa-external-link-alt"></i>
-                    View Publication Details
+                    <i class="fas fa-external-link-alt"></i> View Publication Details
                 </a>
             </div>
         </div>
@@ -1309,8 +1322,7 @@
                     <div class="project-content">
                         <h3 class="project-title">Wind Speed Prediction System</h3>
                         <p class="project-description">
-                            Neural network algorithm for wind speed and direction prediction at Minas de Huascachaca 
-                            Wind Farm, supporting strategic decisions and optimization of renewable energy utilization.
+                            Neural network algorithm for wind speed and direction prediction at Minas de Huascachaca Wind Farm, supporting strategic decisions and optimization of renewable energy utilization.
                         </p>
                         <div class="project-features">
                             <div class="feature">
@@ -1334,7 +1346,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="project-card">
                     <div class="project-image">
                         <i class="fas fa-robot"></i>
@@ -1342,8 +1353,7 @@
                     <div class="project-content">
                         <h3 class="project-title">Multi-Agent Path Planning</h3>
                         <p class="project-description">
-                            Developed RRT and RMP path planning algorithms in Python for multi-agent navigation 
-                            within the ROS-Gazebo environment, visualized results in Rviz for effective system analysis.
+                            Developed RRT and RMP path planning algorithms in Python for multi-agent navigation within the ROS-Gazebo environment, visualized results in Rviz for effective system analysis.
                         </p>
                         <div class="project-features">
                             <div class="feature">
@@ -1367,7 +1377,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="project-card">
                     <div class="project-image electronics">
                         <i class="fas fa-bell"></i>
@@ -1375,8 +1384,7 @@
                     <div class="project-content">
                         <h3 class="project-title">Emergency Alert System</h3>
                         <p class="project-description">
-                            Developed a cloud-based emergency alert system using DigitalOcean and ISSABEL PBX, 
-                            enabling remote activation via Zoiper for emergencies, enhancing community safety.
+                            Developed a cloud-based emergency alert system using DigitalOcean and ISSABEL PBX, enabling remote activation via Zoiper for emergencies, enhancing community safety.
                         </p>
                         <div class="project-features">
                             <div class="feature">
@@ -1419,7 +1427,6 @@
                             <p>+1 (347) 904-3561</p>
                         </div>
                     </div>
-
                     <div class="contact-item">
                         <div class="contact-icon">
                             <i class="fas fa-envelope"></i>
@@ -1429,7 +1436,6 @@
                             <p>edison.andres68@gmail.com</p>
                         </div>
                     </div>
-
                     <div class="contact-item">
                         <div class="contact-icon">
                             <i class="fas fa-map-marker-alt"></i>
@@ -1439,7 +1445,7 @@
                             <p>Elmhurst, NY, 11373</p>
                         </div>
                     </div>
-
+                    <!-- Reemplazado el enlace único de LinkedIn por dos accesos -->
                     <div class="contact-item">
                         <div class="contact-icon">
                             <i class="fab fa-linkedin"></i>
@@ -1449,14 +1455,20 @@
                             <p>linkedin.com/in/edison-santillan</p>
                         </div>
                     </div>
-
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fab fa-github"></i>
+                        </div>
+                        <div>
+                            <h3>GitHub</h3>
+                            <p>github.com/edison-santillan</p>
+                        </div>
+                    </div>
                     <div class="personal-quote" style="margin: 2rem 0 0 0; background: rgba(77, 201, 255, 0.05); border-left-color: var(--ai-color);">
                         <strong>Have an interesting project?</strong><br>
-                        I love collaborating in multidisciplinary teams. Let's talk about how we can 
-                        apply AI, machine learning, or automation to your next challenge.
+                        I love collaborating in multidisciplinary teams. Let's talk about how we can apply AI, machine learning, or automation to your next challenge.
                     </div>
                 </div>
-
                 <form class="contact-form" id="contactForm" action="https://formspree.io/f/your-form-id" method="POST">
                     <div class="form-group">
                         <input type="text" name="name" placeholder="Your Name" required id="name">
@@ -1500,22 +1512,17 @@
         function createStars() {
             const starsContainer = document.getElementById('stars');
             const starCount = 200;
-            
             for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
-                
                 // Random position
                 const left = Math.random() * 100;
                 const top = Math.random() * 100;
-                
                 // Random size
                 const size = Math.random() * 2 + 0.5;
-                
                 // Random duration and delay for twinkling
                 const duration = Math.random() * 6 + 2;
                 const delay = Math.random() * 5;
-                
                 star.style.cssText = `
                     left: ${left}%;
                     top: ${top}%;
@@ -1524,7 +1531,6 @@
                     --duration: ${duration}s;
                     --delay: ${delay}s;
                 `;
-                
                 starsContainer.appendChild(star);
             }
         }
@@ -1532,27 +1538,21 @@
         // Create shooting stars
         function createShootingStars() {
             const spaceBackground = document.querySelector('.space-background');
-            
             setInterval(() => {
                 if (Math.random() > 0.7) { // 30% probability each interval
                     const shootingStar = document.createElement('div');
                     shootingStar.className = 'shooting-star';
-                    
                     // Random starting position
                     const startX = Math.random() * 20;
                     const startY = Math.random() * 20;
-                    
                     // Random duration
                     const duration = Math.random() * 3 + 2;
-                    
                     shootingStar.style.cssText = `
                         left: ${startX}%;
                         top: ${startY}%;
                         animation: shoot ${duration}s linear;
                     `;
-                    
                     spaceBackground.appendChild(shootingStar);
-                    
                     // Remove after animation
                     setTimeout(() => {
                         shootingStar.remove();
@@ -1564,12 +1564,10 @@
         // Tab System
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
-
         tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 tabBtns.forEach(b => b.classList.remove('active'));
                 tabContents.forEach(c => c.classList.remove('active'));
-                
                 btn.classList.add('active');
                 const tabId = btn.getAttribute('data-tab');
                 document.getElementById(tabId).classList.add('active');
@@ -1604,21 +1602,17 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            
             alert('Downloading AI Engineer CV...');
         }
 
         // Form submission with Formspree
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>Sending...';
             submitBtn.disabled = true;
-
             const formData = new FormData(this);
-            
             fetch(this.action, {
                 method: 'POST',
                 body: formData,
@@ -1647,7 +1641,6 @@
         window.addEventListener('load', function() {
             createStars();
             createShootingStars();
-            
             document.body.style.opacity = '0';
             document.body.style.transition = 'opacity 0.5s ease-in';
             setTimeout(() => {
