@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Eliminar www
+RewriteCond %{HTTP_HOST} ^www\.edisonsantillan\.com$ [NC]
+RewriteRule ^(.*)$ https://edisonsantillan.com/$1 [L,R=301]
+
+# Forzar HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://edisonsantillan.com/$1 [L,R=301]
