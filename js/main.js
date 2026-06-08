@@ -240,6 +240,11 @@ document.getElementById('cForm').addEventListener('submit',function(e){
 function dlCV(){const a=document.createElement('a');a.href='assets/docs/Edison_Santillan_AI_Engineer_CV.pdf';a.download='Edison_Santillan_AI_Engineer_CV.pdf';document.body.appendChild(a);a.click();document.body.removeChild(a)}
 
 document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
-  e.preventDefault();const t=document.querySelector(a.getAttribute('href'));
-  if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+  const h=a.getAttribute('href');
+  e.preventDefault();
+  if(!h||h==='#')return;                         // enlaces placeholder (#) no navegan
+  const t=document.querySelector(h);
+  if(!t)return;
+  if(window.lenis)window.lenis.scrollTo(t,{offset:-62});   // deja espacio para el nav fijo
+  else t.scrollIntoView({behavior:'smooth',block:'start'});
 }));

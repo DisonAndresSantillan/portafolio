@@ -92,7 +92,7 @@ nav {
   font-family:'Orbitron',monospace; font-size:clamp(26px,3vw,38px);
   font-weight:900; letter-spacing:-.5px; margin-bottom:56px;
 }
-.sec-title span {
+.sec-title span:not(.r-mask):not(.r-inner) {
   background:linear-gradient(120deg,var(--ai),var(--ml));
   -webkit-background-clip:text; background-clip:text; color:transparent;
 }
@@ -141,7 +141,8 @@ nav {
   padding:13px 28px; border-radius:3px;
   display:inline-flex; align-items:center; gap:9px;
   text-decoration:none; cursor:pointer; border:none;
-  position:relative; overflow:hidden; transition:all .3s;
+  position:relative; overflow:hidden;
+  transition:background .3s, box-shadow .3s, border-color .3s, color .3s;
 }
 .btn::before {
   content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
@@ -500,9 +501,10 @@ footer {
   width:38px; height:38px; border-radius:50%;
   border:1px solid rgba(77,201,255,.18); background:rgba(77,201,255,.05);
   display:flex; align-items:center; justify-content:center;
-  color:var(--ai); font-size:15px; text-decoration:none; transition:all .25s;
+  color:var(--ai); font-size:15px; text-decoration:none;
+  transition:background .25s, color .25s, box-shadow .25s, border-color .25s;
 }
-.ft-soc a:hover { background:var(--ai); color:var(--bg); transform:translateY(-3px); box-shadow:0 8px 20px rgba(77,201,255,.3); }
+.ft-soc a:hover { background:var(--ai); color:var(--bg); box-shadow:0 8px 20px rgba(77,201,255,.3); }
 
 /* ─── REVEAL ──────────────────────────────────────────── */
 .rev { opacity:0; transform:translateY(24px); transition:opacity .65s ease, transform .65s ease; }
@@ -568,7 +570,7 @@ footer {
   font-family:'Orbitron',monospace; font-weight:800; letter-spacing:-.5px;
   font-size:clamp(22px,3.4vw,40px); line-height:1.28;
 }
-.band-quote span {
+.band-quote span:not(.r-mask):not(.r-inner) {
   background:linear-gradient(120deg,var(--ai),var(--ml));
   -webkit-background-clip:text; background-clip:text; color:transparent;
 }
@@ -627,3 +629,56 @@ footer {
   }
   .band { min-height:300px; }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   PREMIUM FX — smooth scroll · progress · marquee · reveals · magnetic
+   Capa adicional tipo "agency". Degrada con gracia: si GSAP/Lenis
+   no cargan o se pide reduced-motion, el contenido queda visible.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Lenis (scroll suave con inercia) ── */
+html.lenis, html.lenis body { height:auto; }
+.lenis.lenis-smooth { scroll-behavior:auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior:contain; }
+.lenis.lenis-stopped { overflow:hidden; }
+.lenis.lenis-smooth iframe { pointer-events:none; }
+
+/* ── Barra de progreso de scroll ── */
+.scroll-prog {
+  position:fixed; top:0; left:0; height:2px; width:100%;
+  background:linear-gradient(90deg,var(--ai),var(--pur),var(--ylw));
+  transform:scaleX(0); transform-origin:0 50%;
+  z-index:200; box-shadow:0 0 12px rgba(77,201,255,.5);
+  pointer-events:none;
+}
+
+/* ── Marquee infinito (ticker de tecnologías) ── */
+.marquee {
+  position:relative; display:flex; overflow:hidden; padding:20px 0;
+  border-top:1px solid var(--bdr); border-bottom:1px solid var(--bdr);
+  background:linear-gradient(90deg,rgba(77,201,255,.05),transparent 30%,transparent 70%,rgba(209,155,255,.05));
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+}
+.marquee-track {
+  display:flex; width:max-content; flex-shrink:0;
+  animation:marquee 32s linear infinite; will-change:transform;
+}
+.marquee:hover .marquee-track { animation-play-state:paused; }
+.marquee-item {
+  display:flex; align-items:center; gap:30px; padding-right:30px; white-space:nowrap;
+  font-family:'Orbitron',monospace; font-weight:800; text-transform:uppercase;
+  font-size:clamp(18px,2.6vw,30px); letter-spacing:1px;
+  color:rgba(122,154,184,.16);
+  -webkit-text-stroke:1px rgba(122,154,184,.5);
+}
+.marquee-item i { color:var(--ai); -webkit-text-stroke:0; font-size:.46em; opacity:.85; }
+@keyframes marquee { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .marquee-track { animation:none; } }
+
+/* ── Reveal con máscara (títulos suben desde abajo) ── */
+.r-mask  { display:block; overflow:hidden; padding:.08em 0; margin:-.08em 0; }
+.r-inner { display:block; will-change:transform; }
+
+/* ── Botones magnéticos: que el transform lo controle JS sin saltos ── */
+.btn, .ft-soc a { will-change:transform; }
