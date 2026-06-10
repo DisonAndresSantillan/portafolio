@@ -43,12 +43,15 @@ if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
     spinSpeed:   0.05      // velocidad de giro del nudo (rad/s)
   };
 
-  /* móvil/táctil: menos partículas y render más barato para que no se congele */
+  /* móvil/táctil: menos partículas y render más barato para que no se congele,
+     y calibrado con MÁS movimiento (sin ratón, el giro lento parecía estático) */
   const COARSE = window.matchMedia('(pointer:coarse)').matches || Math.min(innerWidth, innerHeight) < 600;
   if(COARSE){
-    WOVEN.knotSegs   = 110;   // 110×22 ≈ 2.4k partículas (vs ~9k en escritorio)
+    WOVEN.knotSegs   = 110;    // 110×22 ≈ 2.4k partículas (vs ~9k en escritorio)
     WOVEN.knotRadial = 22;
     WOVEN.dotSize    = Math.max(WOVEN.dotSize, 0.045);  // puntos mayores compensan la densidad
+    WOVEN.spinSpeed  = 0.14;   // giro claramente perceptible
+    WOVEN.repelForce = Math.max(WOVEN.repelForce, 0.016); // ondas más visibles al tocar
   }
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -104,9 +107,10 @@ if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
     mwx = ((cx/innerWidth)*2-1)*WOVEN.mouseRange;
     mwy = (-(cy/innerHeight)*2+1)*WOVEN.mouseRange;
   }
+  let lastTouch = -1e9;                              // último toque real (para el dedo fantasma)
   window.addEventListener('mousemove', e=>aim(e.clientX, e.clientY), { passive:true });
-  window.addEventListener('touchstart', e=>{ const t=e.touches[0]; if(t) aim(t.clientX, t.clientY); }, { passive:true });
-  window.addEventListener('touchmove',  e=>{ const t=e.touches[0]; if(t) aim(t.clientX, t.clientY); }, { passive:true });
+  window.addEventListener('touchstart', e=>{ const t=e.touches[0]; if(t){ aim(t.clientX, t.clientY); lastTouch=performance.now(); } }, { passive:true });
+  window.addEventListener('touchmove',  e=>{ const t=e.touches[0]; if(t){ aim(t.clientX, t.clientY); lastTouch=performance.now(); } }, { passive:true });
 
   const clock = new THREE.Clock();
   const MIN_DT = COARSE ? 1000/30 : 0;             // en móvil 30 fps bastan y ahorran CPU/batería
@@ -115,6 +119,15 @@ if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
     requestAnimationFrame(frame);
     if(t - lastT < MIN_DT) return;
     lastT = t;
+
+    /* dedo fantasma (solo táctil): si no hay toque reciente, un punto
+       invisible recorre el tejido en órbita → siempre hay ondulación */
+    if(COARSE && t - lastTouch > 1200){
+      const s = clock.getElapsedTime();
+      mwx = Math.sin(s*0.55)*1.8;
+      mwy = Math.cos(s*0.42)*1.5;
+    }
+
     for(let i=0;i<N;i++){
       const ix=i*3, iy=ix+1, iz=ix+2;
       let px=positions[ix], py=positions[iy], pz=positions[iz];
@@ -136,7 +149,9 @@ if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
       vel[ix]=vx; vel[iy]=vy; vel[iz]=vz;
     }
     posAttr.needsUpdate = true;
-    points.rotation.y = clock.getElapsedTime()*WOVEN.spinSpeed;
+    const el = clock.getElapsedTime();
+    points.rotation.y = el*WOVEN.spinSpeed;
+    if(COARSE) points.rotation.x = Math.sin(el*0.18)*0.12;   // balanceo sutil extra en móvil
     renderer.render(scene, camera);
   }
 
@@ -212,6 +227,41 @@ document.querySelectorAll('.sk-card').forEach(c=>bObs.observe(c));
   }
   intro();
   window.addEventListener('load', intro);   // re-mide tras cargar fuentes/imágenes
+})();
+
+/* ─── ACORDEONES MÓVILES — journey y research plegados, tap para expandir ─── */
+(function(){
+  const mqM = window.matchMedia('(max-width:640px)');
+  document.querySelectorAll('#experience .card, #research .res-card').forEach(c=>{
+    c.addEventListener('click', e=>{
+      if(!mqM.matches) return;
+      if(e.target.closest('a')) return;            // los enlaces internos no pliegan
+      c.classList.toggle('open');
+    });
+  });
+})();
+
+/* ─── NAV MÓVIL — hamburguesa + nombre al pasar el hero ─── */
+(function(){
+  const nav = document.querySelector('nav');
+  const burger = document.getElementById('navBurger');
+  if(!nav || !burger) return;
+  burger.addEventListener('click', ()=>{
+    const open = nav.classList.toggle('menu-open');
+    burger.setAttribute('aria-expanded', open);
+  });
+  // al elegir una sección se cierra el menú
+  nav.querySelectorAll('.nav-links a').forEach(a=> a.addEventListener('click', ()=>{
+    nav.classList.remove('menu-open');
+    burger.setAttribute('aria-expanded','false');
+  }));
+  // .past-hero → el CSS móvil muestra el nombre en la barra fuera del hero
+  const home = document.getElementById('home');
+  function onScroll(){
+    nav.classList.toggle('past-hero', window.scrollY > (home ? home.offsetHeight - 140 : 400));
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
 })();
 
 /* ─── NAV ACTIVE ──────────────────────────────────── */

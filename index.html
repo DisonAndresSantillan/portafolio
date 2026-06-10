@@ -24,7 +24,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <!-- ?v= cache-busting: subir la fecha en cada deploy para que el móvil no sirva la versión vieja -->
-<link rel="stylesheet" href="css/styles.css?v=20260610b">
+<link rel="stylesheet" href="css/styles.css?v=20260610g">
 </head>
 <body>
 
@@ -42,6 +42,7 @@
 <!-- ── NAV ── -->
 <nav>
   <div class="nav-wrap">
+    <button id="navBurger" class="nav-burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
     <a href="#home" class="nav-logo">EDISON SANTILLÁN</a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
@@ -263,7 +264,9 @@
         </article>
 
       </div>
-      <p class="cl-hint"><i class="fas fa-arrows-left-right"></i>Drag left or right to browse the cards</p>
+      <div class="cl-arrows" aria-hidden="true">
+        <span>&lsaquo;</span><span>&lsaquo;</span><span>&lsaquo;</span><span>&rsaquo;</span><span>&rsaquo;</span><span>&rsaquo;</span>
+      </div>
     </div>
   </div>
 </section>
@@ -397,12 +400,12 @@
 
 <!-- Three.js (hero "woven light" particles) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="js/main.js?v=20260610b"></script>
+<script src="js/main.js?v=20260610g"></script>
 <!-- GSAP scroll animations -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <!-- Lenis smooth scroll (inertia) -->
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
-<script src="js/animations.js?v=20260610b"></script>
+<script src="js/animations.js?v=20260610g"></script>
 </body>
 </html>

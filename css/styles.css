@@ -80,6 +80,20 @@ nav {
 .nav-links a:hover, .nav-links a.active { color:var(--ai); }
 .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
 
+/* hamburguesa (oculta en escritorio, visible en móvil) */
+.nav-burger {
+  display:none; flex-direction:column; justify-content:center; align-items:center; gap:5px;
+  width:44px; height:44px; margin-left:-10px;
+  background:none; border:none; padding:0; cursor:pointer;
+}
+.nav-burger span {
+  display:block; width:22px; height:2px; border-radius:2px;
+  background:var(--text); transition:transform .3s ease, opacity .25s ease;
+}
+nav.menu-open .nav-burger span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+nav.menu-open .nav-burger span:nth-child(2){ opacity:0; }
+nav.menu-open .nav-burger span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
 /* ─── PAGE WRAPPER ────────────────────────────────────── */
 .page { position:relative; z-index:1; }
 
@@ -372,7 +386,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .cl-track {
   display:flex; gap:20px; align-items:stretch; padding:36px 4px 14px;
   overflow-x:auto; scrollbar-width:none; cursor:grab;
-  user-select:none; -webkit-user-select:none; touch-action:pan-y;
+  user-select:none; -webkit-user-select:none; touch-action:pan-x pan-y;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent);
           mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent);
 }
@@ -446,18 +460,28 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 .sk-code { margin-top:auto; padding-top:14px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:1px; color:var(--sub); opacity:.55; }
 
-.cl-hint { display:flex; align-items:center; justify-content:center; gap:8px; margin-top:28px; font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:1px; color:var(--sub); opacity:.7; }
-.cl-hint i { color:var(--ai); }
+/* flechas ‹‹‹ ››› bajo el carrusel: se iluminan de adentro hacia afuera */
+.cl-arrows {
+  display:flex; justify-content:center; align-items:center; gap:8px;
+  margin-top:24px; font-family:'JetBrains Mono',monospace;
+  font-size:22px; line-height:1; color:var(--ai); user-select:none;
+}
+.cl-arrows span { opacity:.15; animation:arrowGlow 1.8s ease-in-out infinite; }
+.cl-arrows span:nth-child(4) { margin-left:22px; }
+/* de adentro (centro) hacia afuera */
+.cl-arrows span:nth-child(3), .cl-arrows span:nth-child(4) { animation-delay:0s; }
+.cl-arrows span:nth-child(2), .cl-arrows span:nth-child(5) { animation-delay:.18s; }
+.cl-arrows span:nth-child(1), .cl-arrows span:nth-child(6) { animation-delay:.36s; }
+@keyframes arrowGlow {
+  0%, 100% { opacity:.15; text-shadow:none; }
+  35%      { opacity:1; text-shadow:0 0 12px var(--ai); }
+}
+@media (prefers-reduced-motion: reduce) { .cl-arrows span { animation:none; opacity:.5; } }
 
+/* móvil: mismo carrusel del tendedero, con swipe nativo + snap */
 @media (max-width:760px) {
-  .cl-track {
-    flex-direction:column; gap:18px; padding:6px 0 0;
-    overflow:visible; cursor:default;
-    -webkit-mask-image:none; mask-image:none;
-  }
-  .cl-rail, .cl-clip, .cl-hint { display:none; }
-  .sk-card { flex:none; }
-  .sk-inner { padding:24px 22px; }
+  .cl-track { scroll-snap-type:x mandatory; cursor:default; }
+  .sk-card { flex:0 0 min(320px, 82vw); scroll-snap-align:center; }
   .sk-card:hover .sk-inner { animation:none; }
 }
 
@@ -592,7 +616,32 @@ footer {
   .hero-stats > div  { padding:4px 30px; }
 }
 @media (max-width:640px) {
-  .nav-links  { display:none; }
+  /* ── NAV MÓVIL ──
+     hero: hamburguesa centrada, sin nombre.
+     past-hero: el nombre entra a la izquierda y la hamburguesa
+     se desliza a la derecha (clase .past-hero por JS). */
+  .nav-wrap { position:relative; justify-content:flex-start; }
+  .nav-burger {
+    display:flex; margin:0;
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    transition:left .4s ease, transform .4s ease;
+  }
+  nav.past-hero .nav-burger { left:calc(100% - 32px); transform:translate(-100%,-50%); }
+  .nav-logo { opacity:0; transform:translateY(-6px); pointer-events:none; transition:opacity .35s ease, transform .35s ease; }
+  nav.past-hero .nav-logo { opacity:1; transform:none; pointer-events:auto; }
+  /* menú desplegable bajo la barra */
+  .nav-links {
+    position:absolute; top:62px; left:0; right:0;
+    display:flex; flex-direction:column; gap:0;
+    background:rgba(4,8,15,.96);
+    -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--bdr);
+    max-height:0; overflow:hidden; transition:max-height .4s ease;
+  }
+  nav.menu-open .nav-links { max-height:420px; }
+  .nav-links li { border-top:1px solid rgba(77,201,255,.08); }
+  .nav-links a { display:block; padding:15px 28px; font-size:13px; }
+  .nav-links a::after { display:none; }
   .proj-grid  { grid-template-columns:1fr; }
   .f-row      { grid-template-columns:1fr; }
   .hero-eyebrow { font-size:11px; letter-spacing:2px; padding:7px 14px; }
@@ -694,14 +743,14 @@ footer {
 
 /* ── Responsive de los efectos ── */
 @media (max-width:760px) {
+  .stack { padding:24px 20px 0; }
   .stack-inner { grid-template-columns:1fr; }
   .stack-media { height:200px; min-height:200px; }
   .stack-media::after { background:linear-gradient(180deg, transparent 55%, var(--bg2)); }
   .stack-body { padding:28px 24px 32px; }
-  /* sin sticky en móvil: las tarjetas fluyen normales */
-  .stack-card, .stack-card:nth-child(1), .stack-card:nth-child(2), .stack-card:nth-child(3) {
-    position:static; margin-bottom:24px;
-  }
+  /* móvil: mismo efecto apilado del escritorio (sticky + GSAP),
+     cada proyecto cubre al anterior al hacer scroll */
+  .stack-card { margin-bottom:32px; }
   .band { min-height:300px; }
 }
 
@@ -761,3 +810,45 @@ html.lenis, html.lenis body { height:auto; }
 
 /* ── Botones magnéticos: que el transform lo controle JS sin saltos ── */
 .btn, .ft-soc a { will-change:transform; }
+
+/* ═══════════════════════════════════════════════════════════
+   MÓVIL — about y journey compactos (≤640px)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width:640px) {
+  /* el hero ya tiene Download CV y Contact → en about sobran */
+  .about-cta { display:none; }
+
+  /* timeline plegado: se ve puesto + empresa + fecha; tap para expandir */
+  .timeline { padding-left:20px; }
+  .tl-item { padding-left:20px; margin-bottom:18px; }
+  .card { padding:18px 20px 34px; cursor:pointer; }
+  .card::after {                                   /* indicador SEE MORE / SEE LESS */
+    content:'SEE MORE +'; position:absolute; right:16px; bottom:12px;
+    font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:1.5px;
+    color:var(--ai); opacity:.85;
+  }
+  .card.open::after { content:'SEE LESS ×'; }
+  .card-desc, .card .tags {
+    max-height:0; overflow:hidden; opacity:0; margin:0;
+    transition:max-height .45s ease, opacity .35s ease, margin .3s ease;
+  }
+  .card.open .card-desc { max-height:320px; opacity:1; margin-bottom:14px; }
+  .card.open .tags      { max-height:220px; opacity:1; margin-bottom:6px; }
+  .card-company { margin-bottom:4px; }
+
+  /* research plegado igual que el journey: venue + descripción tras SEE MORE */
+  .res-card { padding:28px 24px 42px; cursor:pointer; }
+  .res-card::after {
+    content:'SEE MORE +'; position:absolute; right:18px; bottom:14px;
+    font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:1.5px;
+    color:var(--ai); opacity:.85;
+  }
+  .res-card.open::after { content:'SEE LESS ×'; }
+  .res-venue, .res-desc {
+    max-height:0; overflow:hidden; opacity:0; margin:0;
+    transition:max-height .45s ease, opacity .35s ease, margin .3s ease;
+  }
+  .res-card.open .res-venue { max-height:80px;  opacity:1; margin-bottom:18px; }
+  .res-card.open .res-desc  { max-height:420px; opacity:1; margin-bottom:22px; }
+  .res-auth { margin-bottom:14px; }
+}
