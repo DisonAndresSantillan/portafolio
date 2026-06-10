@@ -7,3 +7,17 @@ RewriteRule ^(.*)$ https://edisonsantillan.com/$1 [L,R=301]
 # Forzar HTTPS
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://edisonsantillan.com/$1 [L,R=301]
+
+# ── Caché ──────────────────────────────────────────────
+# HTML/CSS/JS: revalidar en cada visita → los deploys se ven al instante
+# (sin esperar la caché de 7 días que pone Hostinger por defecto).
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|css|js)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+    Header unset Expires
+  </FilesMatch>
+  # Imágenes, fuentes y PDF: caché larga (cambian poco)
+  <FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|ico|woff|woff2|pdf)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+</IfModule>
