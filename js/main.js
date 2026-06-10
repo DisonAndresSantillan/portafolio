@@ -33,7 +33,7 @@ if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
     colors:      ['#4dc9ff','#9be8ff','#d19bff'],  // degradado de marca: --ai → --ml → --pur
     brightBase:  0.65,     // brillo mínimo por partícula
     brightVar:   0.35,     // variación aleatoria de brillo (chispeo)
-    dotSize:     0.01,     // tamaño de cada partícula
+    dotSize:     0.025,    // tamaño de cada partícula (con 0.01 el tejido casi no se ve)
     dotOpacity:  0.85,     // opacidad global de las partículas
     mouseRange:  3,        // alcance del ratón en coords de mundo
     repelRadius: 2.5,      // radio de repulsión alrededor del cursor
@@ -161,68 +161,57 @@ document.querySelectorAll('.rev,.tl-item').forEach(el=>obs.observe(el));
 const bObs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.querySelectorAll('.bar-fill').forEach(b=>{setTimeout(()=>{b.style.width=b.dataset.w+'%'},180)})}),{threshold:.25});
 document.querySelectorAll('.sk-card').forEach(c=>bObs.observe(c));
 
-/* ─── SKILLS CLOTHESLINE — arrastrar para reordenar (shift, no swap) ─── */
+/* ─── SKILLS CLOTHESLINE — arrastrar para recorrer la línea ───
+   Las tarjetas no se mueven ni se descuelgan: la pista (overflow-x)
+   se desplaza con el cursor, con una inercia suave al soltar. */
 (function(){
   const track = document.getElementById('clTrack');
   if(!track) return;
-  const cards = Array.from(track.querySelectorAll('.sk-card'));
-  const N = cards.length;
-  if(N < 2) return;
-  const GAP = 16;                                   // = gap del .cl-track en el CSS
   const mq = window.matchMedia('(min-width:761px)');
-  cards.forEach((c,i)=>{ c._base = i; });
-  let order = cards.slice(), slotW = 0, drag = null, startX = 0, baseDX = 0, pid = null;
+  let down=false, startX=0, startSL=0, lastX=0, lastT=0, vx=0, momentum=null;
 
-  const slotOf = c => order.indexOf(c);
-  const dxOf   = c => (slotOf(c) - c._base) * slotW;
-  function setX(c, x){ c.style.transform = x ? `translateX(${x}px)` : ''; }
-  function measure(){ slotW = cards[0].getBoundingClientRect().width + GAP; }
-
-  function layout(){
-    if(mq.matches){
-      measure();
-      cards.forEach(c=>{ c.style.transition='none'; setX(c, dxOf(c)); });
-      track.offsetWidth;                            // reflow
-      cards.forEach(c=>{ c.style.transition=''; });
-    } else {
-      cards.forEach(c=>{ c.style.transition=''; c.style.transform=''; });
-    }
+  function onDown(e){
+    if(!mq.matches) return;
+    down=true; startX=lastX=e.clientX; startSL=track.scrollLeft;
+    lastT=performance.now(); vx=0;
+    if(momentum){ cancelAnimationFrame(momentum); momentum=null; }
+    track.classList.add('cl-drag');
+    try{ track.setPointerCapture(e.pointerId); }catch(_){}
   }
-
   function onMove(e){
-    if(!drag) return;
-    const x = baseDX + (e.clientX - startX);
-    drag.style.transform = `translateX(${x}px)`;    // se desliza por la línea, sin descolgarse
-    const tp = Math.max(0, Math.min(N-1, Math.round(drag._base + x/slotW)));
-    if(tp !== slotOf(drag)){
-      order.splice(slotOf(drag),1); order.splice(tp,0,drag);
-      cards.forEach(c=>{ if(c!==drag) setX(c, dxOf(c)); });  // los demás se corren en cadena
-    }
+    if(!down) return;
+    track.scrollLeft = startSL - (e.clientX - startX);
+    const now = performance.now(), dt = now - lastT;
+    if(dt > 0){ vx = (e.clientX - lastX) / dt; }    // px/ms para la inercia
+    lastX = e.clientX; lastT = now;
   }
   function onUp(){
-    if(!drag) return;
-    window.removeEventListener('pointermove', onMove);
-    const d = drag; drag = null;
-    d.classList.remove('cl-drag');                  // re-activa la transición → asienta con rebote
-    void d.offsetWidth;
-    setX(d, dxOf(d));
-    try{ d.releasePointerCapture(pid); }catch(_){}
+    if(!down) return;
+    down=false;
+    track.classList.remove('cl-drag');
+    let v = -vx * 14;                               // impulso inicial
+    (function glide(){
+      if(Math.abs(v) < 0.4) return;
+      track.scrollLeft += v; v *= 0.92;             // fricción
+      momentum = requestAnimationFrame(glide);
+    })();
   }
-  function onDown(e){
-    if(!mq.matches || drag) return;
-    drag = e.currentTarget; pid = e.pointerId;
-    measure(); startX = e.clientX; baseDX = dxOf(drag);
-    drag.classList.add('cl-drag');
-    try{ drag.setPointerCapture(pid); }catch(_){}
-    e.preventDefault();
-    window.addEventListener('pointermove', onMove);
-    window.addEventListener('pointerup', onUp, { once:true });
-  }
+  track.addEventListener('pointerdown', onDown);
+  track.addEventListener('pointermove', onMove);
+  track.addEventListener('pointerup', onUp);
+  track.addEventListener('pointercancel', onUp);
 
-  cards.forEach(c=> c.addEventListener('pointerdown', onDown));
-  window.addEventListener('resize', ()=>{ if(!drag) layout(); });
-  window.addEventListener('load', layout);
-  layout();
+  /* arranque: media tarjeta cortada a cada lado → se ve que hay más
+     contenido y que se puede arrastrar (1ª y 4ª asoman a medias) */
+  let touched = false;
+  track.addEventListener('pointerdown', ()=>{ touched = true; }, { once:true });
+  function intro(){
+    if(touched || !mq.matches) return;
+    const card = track.querySelector('.sk-card');
+    if(card) track.scrollLeft = card.offsetWidth / 2;
+  }
+  intro();
+  window.addEventListener('load', intro);   // re-mide tras cargar fuentes/imágenes
 })();
 
 /* ─── NAV ACTIVE ──────────────────────────────────── */

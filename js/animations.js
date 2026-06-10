@@ -62,16 +62,14 @@
   heroTl
     .from('.hero-eyebrow', { y: 24, autoAlpha: 0 })
     .from('.hero-name',    { y: 40, autoAlpha: 0 }, '-=0.6')
-    .from('.hero-role',    { y: 20, autoAlpha: 0 }, '-=0.6')
     .from('.hero-desc',    { y: 20, autoAlpha: 0 }, '-=0.6')
-    .from('.hero-btns .btn',  { y: 22, autoAlpha: 0, stagger: 0.08 }, '-=0.55')
-    .from('.hero-stats > div',{ y: 22, autoAlpha: 0, stagger: 0.10 }, '-=0.5');
+    .from('.hero-btns .btn',  { y: 22, autoAlpha: 0, stagger: 0.08 }, '-=0.55');
 
   /* ── 3 · HERO · el contenido sube y se desvanece al salir ──── */
   var heroInner = document.querySelector('#home .hero-inner');
   if (heroInner) {
     gsap.to(heroInner, {
-      yPercent: 16, opacity: 0.25, ease: 'none',
+      yPercent: 14, opacity: 0.5, ease: 'none',
       scrollTrigger: { trigger: '#home', start: 'top top', end: 'bottom top', scrub: true }
     });
   }
@@ -137,9 +135,12 @@
     if (i === cards.length - 1) return;            // la última se queda intacta
     var inner = card.querySelector('.stack-inner');
     if (!inner) return;
+    // solo se atenúa mientras la siguiente la está cubriendo de verdad
+    // (antes: 'top bottom' → empezaba apenas asomaba la siguiente y la
+    // tarjeta que estabas leyendo ya se veía opacada)
     gsap.to(inner, {
-      scale: 0.9, autoAlpha: 0.55, ease: 'none',
-      scrollTrigger: { trigger: cards[i + 1], start: 'top bottom', end: 'top top', scrub: true }
+      scale: 0.93, autoAlpha: 0.7, ease: 'none',
+      scrollTrigger: { trigger: cards[i + 1], start: 'top 60%', end: 'top 12%', scrub: true }
     });
   });
 
