@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="assets/img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -46,7 +46,6 @@
       <li><a href="#about">About</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#skills">Skills</a></li>
-      <li><a href="#pipeline">Pipeline</a></li>
       <li><a href="#research">Research</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -63,9 +62,6 @@
       EDISON
       <span class="hero-name-hi">SANTILLÁN</span>
     </h1>
-    <div class="hero-role">
-      Electronics <span>·</span> AI <span>·</span> Machine Learning <span>·</span> Robotics
-    </div>
     <p class="hero-desc">
       8+ years building intelligent systems that bridge electronics with artificial intelligence —
       from neural networks to real-time prediction algorithms.
@@ -74,20 +70,14 @@
       <a href="#projects" class="btn btn-p"><i class="fas fa-rocket"></i>VIEW MY WORK</a>
       <a href="#contact"  class="btn btn-o"><i class="fas fa-paper-plane"></i>CONTACT ME</a>
       <button            class="btn btn-o" onclick="dlCV()"><i class="fas fa-download"></i>DOWNLOAD CV</button>
-    </div>
-    <div class="hero-stats">
-      <div><div class="stat-n" id="c-y">0</div><div class="stat-l">Years Exp.</div></div>
-      <div><div class="stat-n" id="c-p">0</div><div class="stat-l">AI Projects</div></div>
-      <div><div class="stat-n" id="c-r">0</div><div class="stat-l">Publications</div></div>
-    </div>
-  </div>
+    </div>  </div>
 </section>
 
 <!-- ── MARQUEE TICKER ── -->
 <div class="marquee" aria-hidden="true">
   <div class="marquee-track">
-    <span class="marquee-item">Machine Learning <i class="fas fa-plus"></i> Neural Networks <i class="fas fa-plus"></i> Computer Vision <i class="fas fa-plus"></i> Deep Learning <i class="fas fa-plus"></i> Robotics <i class="fas fa-plus"></i> IoT <i class="fas fa-plus"></i> Time Series <i class="fas fa-plus"></i> Edge AI <i class="fas fa-plus"></i> Automation <i class="fas fa-plus"></i></span>
-    <span class="marquee-item">Machine Learning <i class="fas fa-plus"></i> Neural Networks <i class="fas fa-plus"></i> Computer Vision <i class="fas fa-plus"></i> Deep Learning <i class="fas fa-plus"></i> Robotics <i class="fas fa-plus"></i> IoT <i class="fas fa-plus"></i> Time Series <i class="fas fa-plus"></i> Edge AI <i class="fas fa-plus"></i> Automation <i class="fas fa-plus"></i></span>
+    <span class="marquee-item">Electronics <i class="fas fa-plus"></i> AI <i class="fas fa-plus"></i> Machine Learning <i class="fas fa-plus"></i> Neural Networks <i class="fas fa-plus"></i> Computer Vision <i class="fas fa-plus"></i> Deep Learning <i class="fas fa-plus"></i> Robotics <i class="fas fa-plus"></i> IoT <i class="fas fa-plus"></i> Time Series <i class="fas fa-plus"></i> Edge AI <i class="fas fa-plus"></i> Automation <i class="fas fa-plus"></i></span>
+    <span class="marquee-item">Electronics <i class="fas fa-plus"></i> AI <i class="fas fa-plus"></i> Machine Learning <i class="fas fa-plus"></i> Neural Networks <i class="fas fa-plus"></i> Computer Vision <i class="fas fa-plus"></i> Deep Learning <i class="fas fa-plus"></i> Robotics <i class="fas fa-plus"></i> IoT <i class="fas fa-plus"></i> Time Series <i class="fas fa-plus"></i> Edge AI <i class="fas fa-plus"></i> Automation <i class="fas fa-plus"></i></span>
   </div>
 </div>
 
@@ -101,13 +91,26 @@
         <img src="assets/img/profile.jpg" alt="Edison Santillán">
         <div class="corner tl"></div><div class="corner tr"></div>
         <div class="corner bl"></div><div class="corner br"></div>
-        <div class="img-tag">STATUS: AVAILABLE<strong>OPEN TO OPPORTUNITIES</strong></div>
-        <div class="img-tag" style="margin-top:8px">LOCATION<strong>New York</strong></div>
+        <div class="about-badge"><span class="about-badge-dot"></span>OPEN TO OPPORTUNITIES</div>
       </div>
       <div class="about-text">
-        <p><strong>Electronics and Automation Engineer</strong> specialized in Artificial Intelligence and Machine Learning — designing intelligent systems from neural networks to real-time prediction algorithms.</p>
-        <div class="about-quote">"I believe in the power of teamwork. I love tackling complex challenges alongside talented colleagues, where each contributes their expertise to create solutions that exceed what we could achieve individually."</div>
-        <p>When I'm not building models, I mentor developers, participate in hackathons, and contribute to projects advancing AI and intelligent automation.</p>
+        <p><strong>Electronics &amp; Automation Engineer</strong> specialized in Artificial Intelligence and Machine Learning. I started out as an electronics and control engineer focused on process systems — then I grew passionate about software, and I've been developing and growing ever since, designing intelligent systems end to end: from neural networks to real-time prediction algorithms running on real hardware.</p>
+
+        <div class="about-facts">
+          <div class="fact"><i class="fas fa-location-dot"></i><div><span class="fact-l">Based in</span><span class="fact-v">New York</span></div></div>
+          <div class="fact"><i class="fas fa-layer-group"></i><div><span class="fact-l">Focus</span><span class="fact-v">AI · ML · Robotics</span></div></div>
+          <div class="fact"><i class="fas fa-briefcase"></i><div><span class="fact-l">Experience</span><span class="fact-v">8+ years</span></div></div>
+          <div class="fact"><i class="fas fa-language"></i><div><span class="fact-l">Languages</span><span class="fact-v">English · Spanish</span></div></div>
+        </div>
+
+        <div class="about-quote">"I believe in the power of teamwork — tackling complex challenges alongside talented colleagues, where each contributes their expertise to create solutions that exceed what we could achieve individually."</div>
+
+        <p>When I'm not building models, I mentor developers, join hackathons, and contribute to projects advancing AI and intelligent automation.</p>
+
+        <div class="about-cta">
+          <button class="btn btn-p" onclick="dlCV()"><i class="fas fa-download"></i>DOWNLOAD CV</button>
+          <a href="#contact" class="btn btn-o"><i class="fas fa-paper-plane"></i>LET'S TALK</a>
+        </div>
       </div>
     </div>
   </div>
@@ -233,56 +236,10 @@
 
 <div class="divider"></div>
 
-<!-- ── PIPELINE ── -->
-<section id="pipeline" class="sec">
-  <div class="inner">
-    <div class="sec-label">04</div>
-    <h2 class="sec-title"><span>NEURAL</span> PIPELINE</h2>
-
-    <div class="pipe-tabs rev">
-      <button class="pipe-tab active" data-s="0"><span class="pipe-tab-n">01</span>INGESTION</button>
-      <button class="pipe-tab"        data-s="1"><span class="pipe-tab-n">02</span>PREPROCESS</button>
-      <button class="pipe-tab"        data-s="2"><span class="pipe-tab-n">03</span>TRAINING</button>
-      <button class="pipe-tab"        data-s="3"><span class="pipe-tab-n">04</span>EVALUATION</button>
-      <button class="pipe-tab"        data-s="4"><span class="pipe-tab-n">05</span>DEPLOYMENT</button>
-    </div>
-
-    <!-- panels -->
-    <div class="pipe-panel active" id="s-0">
-      <div><span class="pipe-stage-lbl">Stage 01 / 05</span><h3 class="pipe-h">DATA INGESTION</h3><p class="pipe-p">Robust pipelines handling streaming and batch inputs from sensors, APIs and databases — fault-tolerant, schema-validated, real-time ready.</p>
-      <div class="pipe-mets"><div class="met"><div class="met-v">99.8%</div><div class="met-l">Uptime SLA</div></div><div class="met"><div class="met-v">&lt;50ms</div><div class="met-l">Latency</div></div><div class="met"><div class="met-v">TB+</div><div class="met-l">Processed</div></div><div class="met"><div class="met-v">Live</div><div class="met-l">Stream</div></div></div></div>
-      <div class="canvas-wrap"><canvas id="cv0"></canvas><div class="canvas-lbl">LIVE SIMULATION</div><div class="canvas-dot"></div></div>
-    </div>
-    <div class="pipe-panel" id="s-1">
-      <div><span class="pipe-stage-lbl">Stage 02 / 05</span><h3 class="pipe-h">PREPROCESSING</h3><p class="pipe-p">Noise filtering, normalization, outlier detection and feature extraction — maximizing signal quality before training.</p>
-      <div class="pipe-mets"><div class="met"><div class="met-v">40+</div><div class="met-l">Features</div></div><div class="met"><div class="met-v">98%</div><div class="met-l">Purity</div></div><div class="met"><div class="met-v">Auto</div><div class="met-l">Pipeline</div></div><div class="met"><div class="met-v">PCA</div><div class="met-l">Dim Reduction</div></div></div></div>
-      <div class="canvas-wrap"><canvas id="cv1"></canvas><div class="canvas-lbl">SIGNAL PROCESSING</div><div class="canvas-dot"></div></div>
-    </div>
-    <div class="pipe-panel" id="s-2">
-      <div><span class="pipe-stage-lbl">Stage 03 / 05</span><h3 class="pipe-h">MODEL TRAINING</h3><p class="pipe-p">LSTM, CNN and Transformer architectures trained GPU-accelerated with custom loss functions and automated hyperparameter tuning.</p>
-      <div class="pipe-mets"><div class="met"><div class="met-v">97%</div><div class="met-l">Peak Accuracy</div></div><div class="met"><div class="met-v">GPU</div><div class="met-l">Accelerated</div></div><div class="met"><div class="met-v">50+</div><div class="met-l">Models Built</div></div><div class="met"><div class="met-v">Auto</div><div class="met-l">Hyperopt</div></div></div></div>
-      <div class="canvas-wrap"><canvas id="cv2"></canvas><div class="canvas-lbl">TRAINING LOOP</div><div class="canvas-dot"></div></div>
-    </div>
-    <div class="pipe-panel" id="s-3">
-      <div><span class="pipe-stage-lbl">Stage 04 / 05</span><h3 class="pipe-h">EVALUATION</h3><p class="pipe-p">Rigorous validation via cross-validation, confusion matrices, ROC curves and SHAP explainability.</p>
-      <div class="pipe-mets"><div class="met"><div class="met-v">5-fold</div><div class="met-l">Cross-Val</div></div><div class="met"><div class="met-v">SHAP</div><div class="met-l">Explainability</div></div><div class="met"><div class="met-v">A/B</div><div class="met-l">Testing</div></div><div class="met"><div class="met-v">Full</div><div class="met-l">Audit Trail</div></div></div></div>
-      <div class="canvas-wrap"><canvas id="cv3"></canvas><div class="canvas-lbl">EVALUATION METRICS</div><div class="canvas-dot"></div></div>
-    </div>
-    <div class="pipe-panel" id="s-4">
-      <div><span class="pipe-stage-lbl">Stage 05 / 05</span><h3 class="pipe-h">DEPLOYMENT</h3><p class="pipe-p">Containerized models on cloud with autoscaling, 24/7 monitoring and automated retraining. Sub-100ms inference via REST APIs.</p>
-      <div class="pipe-mets"><div class="met"><div class="met-v">&lt;100ms</div><div class="met-l">Inference</div></div><div class="met"><div class="met-v">Auto</div><div class="met-l">Scaling</div></div><div class="met"><div class="met-v">24/7</div><div class="met-l">Monitoring</div></div><div class="met"><div class="met-v">CI/CD</div><div class="met-l">Automated</div></div></div></div>
-      <div class="canvas-wrap"><canvas id="cv4"></canvas><div class="canvas-lbl">INFERENCE ENGINE</div><div class="canvas-dot"></div></div>
-    </div>
-
-  </div>
-</section>
-
-<div class="divider"></div>
-
 <!-- ── RESEARCH ── -->
 <section id="research" class="sec">
   <div class="inner">
-    <div class="sec-label">05</div>
+    <div class="sec-label">04</div>
     <h2 class="sec-title"><span>RESEARCH</span></h2>
     <div class="res-card rev">
       <div class="res-badge">IFAC 2024 · PEER REVIEWED</div>
@@ -307,7 +264,7 @@
 <!-- ── PROJECTS (stacked cards) ── -->
 <section id="projects" class="sec">
   <div class="inner">
-    <div class="sec-label">06</div>
+    <div class="sec-label">05</div>
     <h2 class="sec-title"><span>FEATURED</span> PROJECTS</h2>
   </div>
   <div class="stack">
@@ -365,7 +322,7 @@
 <!-- ── CONTACT ── -->
 <section id="contact" class="sec">
   <div class="inner">
-    <div class="sec-label">07</div>
+    <div class="sec-label">06</div>
     <h2 class="sec-title"><span>GET IN</span> TOUCH</h2>
     <div class="contact-grid">
       <div class="rev">
@@ -396,7 +353,7 @@
 
 <footer>
   <div class="ft-wrap">
-    <div class="ft-copy">© 2025 EDISON SANTILLÁN · AI & ML ENGINEER</div>
+    <div class="ft-copy">© 2026 EDISON SANTILLÁN · AI & ML ENGINEER</div>
     <div class="ft-soc">
       <a href="https://www.linkedin.com/in/edison-andr%C3%A9s-santill%C3%A1n-54a2b7207/" target="_blank"><i class="fab fa-linkedin"></i></a>
       <a href="https://github.com/DisonAndresSantillan" target="_blank"><i class="fab fa-github"></i></a>

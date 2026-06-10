@@ -3,7 +3,7 @@
    Efectos: scroll suave con inercia · parallax por capas · entrada
             del hero · reveals con máscara · reveal de imágenes
             (clip-path) · botones magnéticos · barra de progreso ·
-            tarjetas apiladas (stack) · pipeline "pinned".
+            tarjetas apiladas (stack).
    Tolerante a fallos: si Lenis/GSAP no cargan o se pide
    reduced-motion, no se aplica nada y el sitio se ve igual.
    ════════════════════════════════════════════════════════════ */
@@ -143,29 +143,6 @@
     });
   });
 
-  /* ── 9 · PIPELINE "pinned" (scrollytelling) ─────────────────
-     Solo en escritorio: la sección se fija y al hacer scroll
-     avanza por las 5 etapas (llamando a switchS de main.js).
-     En móvil se mantienen las pestañas clicables de siempre.    */
-  if (typeof window.switchS === 'function') {
-    var mm = gsap.matchMedia();
-    mm.add('(min-width: 901px)', function () {
-      var STAGES = 5, cur = -1;
-      var st = ScrollTrigger.create({
-        trigger: '#pipeline',
-        start: 'top top',
-        end: '+=' + (STAGES * 55) + '%',
-        pin: true,
-        anticipatePin: 1,
-        onUpdate: function (self) {
-          var i = Math.min(STAGES - 1, Math.floor(self.progress * STAGES));
-          if (i !== cur) { cur = i; window.switchS(i); }
-        }
-      });
-      return function () { st.kill(); };           // cleanup al cambiar de breakpoint
-    });
-  }
-
-  /* ── 10 · Refresh cuando todo cargue (imágenes/fuentes) ────── */
+  /* ── 9 · Refresh cuando todo cargue (imágenes/fuentes) ────── */
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
 })();
