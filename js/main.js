@@ -8,53 +8,106 @@ document.querySelectorAll('a,button').forEach(el=>{
   el.addEventListener('mouseleave',()=>{rng.style.width='34px';rng.style.height='34px';rng.style.borderColor='rgba(77,201,255,.5)'});
 });
 
-/* ─── BACKGROUND PARTICLE CANVAS ─────────────────── */
+/* ─── HERO WOVEN LIGHT (Three.js) ─────────────────── */
+/* Tejido de partículas sobre un toro-nudo que gira y reacciona al ratón.
+   Portado de un componente React/Three.js/framer-motion a vanilla. Se dibuja
+   sobre el #bg-canvas global (alpha) → como el resto de secciones tienen fondo
+   opaco, solo se ve en el hero, tras el nombre. Color: degradado de marca
+   (cian → cian claro → morado). El bucle de física es allocation-free para ir
+   fluido con ~9k partículas. Sin Three.js o con prefers-reduced-motion no anima. */
 (function(){
-  const cv=document.getElementById('bg-canvas');
-  const ctx=cv.getContext('2d');
-  let W,H,pts=[];
+  const cv = document.getElementById('bg-canvas');
+  if(typeof THREE === 'undefined') return;             // Three.js no cargó → no rompe
 
-  function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight}
-  resize(); window.addEventListener('resize',resize);
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function make(){
-    pts=[];
-    const N=Math.floor((W*H)/18000);
-    for(let i=0;i<N;i++) pts.push({
-      x:Math.random()*W, y:Math.random()*H,
-      vx:(Math.random()-.5)*.35, vy:(Math.random()-.5)*.35,
-      r:Math.random()*1.6+.6,
-      p:Math.random()*Math.PI*2, ps:.012+Math.random()*.018,
-      c:Math.random()>.55?'77,201,255':Math.random()>.5?'155,232,255':'209,155,255'
-    });
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.1, 1000);
+  camera.position.z = 5;
+  const renderer = new THREE.WebGLRenderer({ canvas:cv, antialias:true, alpha:true });
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+  // posiciones base = vértices de un toro-nudo
+  const knot = new THREE.TorusKnotGeometry(1.5, 0.5, 220, 40);
+  const base = knot.attributes.position;
+  const N = base.count;                                // ~9.000 puntos
+
+  const positions = new Float32Array(N*3);
+  const original  = new Float32Array(N*3);
+  const colors    = new Float32Array(N*3);
+  const vel       = new Float32Array(N*3);             // velocidad por partícula
+
+  // paleta de marca: --ai → --ml → --pur
+  const cA=new THREE.Color('#4dc9ff'), cM=new THREE.Color('#9be8ff'), cP=new THREE.Color('#d19bff');
+  const tmp=new THREE.Color();
+  for(let i=0;i<N;i++){
+    const x=base.getX(i), y=base.getY(i), z=base.getZ(i);
+    positions[i*3]=original[i*3]=x;
+    positions[i*3+1]=original[i*3+1]=y;
+    positions[i*3+2]=original[i*3+2]=z;
+    const t=i/N;                                        // recorre el degradado a lo largo del nudo
+    if(t<0.5) tmp.copy(cA).lerp(cM, t/0.5);
+    else      tmp.copy(cM).lerp(cP, (t-0.5)/0.5);
+    const b=0.65+Math.random()*0.35;                   // leve variación de brillo → chispeo
+    colors[i*3]=tmp.r*b; colors[i*3+1]=tmp.g*b; colors[i*3+2]=tmp.b*b;
   }
-  make(); window.addEventListener('resize',make);
 
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    // connections
-    for(let i=0;i<pts.length;i++){
-      for(let j=i+1;j<pts.length;j++){
-        const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
-        const d=Math.sqrt(dx*dx+dy*dy);
-        if(d<120){
-          ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
-          ctx.strokeStyle=`rgba(77,201,255,${(1-d/120)*.18})`; ctx.lineWidth=.8; ctx.stroke();
-        }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions,3));
+  geo.setAttribute('color',    new THREE.BufferAttribute(colors,3));
+
+  const material = new THREE.PointsMaterial({
+    size:0.03, vertexColors:true, transparent:true, opacity:0.85,
+    blending:THREE.AdditiveBlending, depthWrite:false
+  });
+  const points = new THREE.Points(geo, material);
+  scene.add(points);
+  const posAttr = geo.attributes.position;
+
+  // ratón en coordenadas de mundo (plano z=0)
+  let mwx=0, mwy=0;
+  window.addEventListener('mousemove', e=>{
+    mwx = ((e.clientX/innerWidth)*2-1)*3;
+    mwy = (-(e.clientY/innerHeight)*2+1)*3;
+  });
+
+  const clock = new THREE.Clock();
+  function frame(){
+    for(let i=0;i<N;i++){
+      const ix=i*3, iy=ix+1, iz=ix+2;
+      let px=positions[ix], py=positions[iy], pz=positions[iz];
+      let vx=vel[ix], vy=vel[iy], vz=vel[iz];
+
+      // repulsión del ratón
+      const dx=px-mwx, dy=py-mwy, dz=pz;
+      const d=Math.sqrt(dx*dx+dy*dy+dz*dz);
+      if(d<1.5 && d>0.0001){
+        const f=(1.5-d)*0.01/d;
+        vx+=dx*f; vy+=dy*f; vz+=dz*f;
       }
+      // retorno al origen + amortiguación
+      vx=(vx+(original[ix]-px)*0.001)*0.95;
+      vy=(vy+(original[iy]-py)*0.001)*0.95;
+      vz=(vz+(original[iz]-pz)*0.001)*0.95;
+
+      positions[ix]=px+vx; positions[iy]=py+vy; positions[iz]=pz+vz;
+      vel[ix]=vx; vel[iy]=vy; vel[iz]=vz;
     }
-    // dots
-    pts.forEach(p=>{
-      p.p+=p.ps; p.x+=p.vx; p.y+=p.vy;
-      if(p.x<0)p.x=W; if(p.x>W)p.x=0;
-      if(p.y<0)p.y=H; if(p.y>H)p.y=0;
-      const g=(Math.sin(p.p)+1)/2;
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.r+g*.6,0,Math.PI*2);
-      ctx.fillStyle=`rgba(${p.c},${.55+g*.35})`; ctx.fill();
-    });
-    requestAnimationFrame(draw);
+    posAttr.needsUpdate = true;
+    points.rotation.y = clock.getElapsedTime()*0.05;
+    renderer.render(scene, camera);
+    requestAnimationFrame(frame);
   }
-  draw();
+
+  window.addEventListener('resize', ()=>{
+    camera.aspect = innerWidth/innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+  });
+
+  renderer.render(scene, camera);
+  if(!reduce) requestAnimationFrame(frame);
 })();
 
 /* ─── COUNTERS ────────────────────────────────────── */
